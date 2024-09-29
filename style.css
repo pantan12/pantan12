@@ -1,0 +1,30 @@
+li{
+    font-weight: bold;
+}
+.name{
+    margin-bottom: 30px;
+}
+.menu{
+    padding-bottom: 1000px;
+    color:black;
+    font-style: italic;
+    background-color: pink;
+}
+.menu:hover{
+    font-style:normal;
+}
+h1{
+    border: 2px solid skyblue;
+    margin-bottom: 0px;
+    padding-left: 70px;
+}
+h1:hover{
+    color:gold;
+    background-color: skyblue;
+}
+ol{
+    margin-left: 40px;
+}
+.title{
+    margin-bottom: 10px;
+}
