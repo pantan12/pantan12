@@ -1,9 +1,6 @@
 li{
     font-weight: bold;
 }
-.name{
-    margin-bottom: 30px;
-}
 .menu{
     padding-bottom: 1000px;
     color:black;
@@ -27,4 +24,7 @@ ol{
 }
 .title{
     margin-bottom: 10px;
+}
+div{
+    margin-bottom: 40px;
 }
