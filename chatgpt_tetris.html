@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris Game</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .tetris-board {
+            display: grid;
+            grid-template-rows: repeat(20, 30px);
+            grid-template-columns: repeat(10, 30px);
+            border: 2px solid #333;
+            margin: 0 auto;
+        }
+        .cell {
+            width: 30px;
+            height: 30px;
+            background-color: #ccc;
+            border: 1px solid #fff;
+        }
+        .block-o { background-color: orange; }
+        .block-i { background-color: cyan; }
+        .block-s { background-color: green; }
+        .block-z { background-color: red; }
+        .block-l { background-color: blue; }
+        .block-j { background-color: purple; }
+        .block-t { background-color: yellow; }
+    </style>
+</head>
+<body>
+    <div class="container text-center mt-4">
+        <h1>Tetris Game</h1>
+        <div class="tetris-board" id="tetris-board"></div>
+        <div class="mt-3">
+            <button id="start-btn" class="btn btn-primary">Start Game</button>
+            <button id="pause-btn" class="btn btn-danger">Pause Game</button>
+        </div>
+        <h3 class="mt-3">Score: <span id="score">0</span></h3>
+        <h3>Remaining Swaps: <span id="swap-count">3</span></h3>
+    </div>
+
+    <script>
+        const boardWidth = 10;
+        const boardHeight = 20;
+        let board = Array.from({ length: boardHeight }, () => Array(boardWidth).fill(''));
+        let currentBlock, gameInterval, isGameRunning = false;
+        const scoreElement = document.getElementById('score');
+        const swapCountElement = document.getElementById('swap-count');
+        let score = 0;
+        let remainingSwaps = 3;
+
+        const blocks = {
+            o: [[1, 1], [1, 1]],
+            i: [[1, 1, 1, 1]],
+            s: [[0, 1, 1], [1, 1, 0]],
+            z: [[1, 1, 0], [0, 1, 1]],
+            l: [[1, 0], [1, 0], [1, 1]],
+            j: [[0, 1], [0, 1], [1, 1]],
+            t: [[1, 1, 1], [0, 1, 0]]
+        };
+
+        function createRandomBlock() {
+            const types = Object.keys(blocks);
+            const type = types[Math.floor(Math.random() * types.length)];
+            currentBlock = { type, shape: blocks[type], x: 3, y: 1 };
+            if (!isValidMove(currentBlock.x, currentBlock.y, currentBlock.shape)) {
+                alert('Game Over');
+                pauseGame();
+                return;
+            }
+            refreshBoard();
+        }
+
+        function startGame() {
+            if (isGameRunning) return; // 게임이 이미 실행 중인 경우 새로운 블록 생성 방지
+            isGameRunning = true;
+            remainingSwaps = 3;  // 교체 횟수 초기화
+            swapCountElement.textContent = remainingSwaps;
+            gameInterval = setInterval(gameLoop, 1000); // 1초마다 아래로 한 칸씩 이동
+            if (!currentBlock) createRandomBlock(); // 첫 게임 시작 시에만 블록 생성
+        }
+
+        function pauseGame() {
+            clearInterval(gameInterval);
+            isGameRunning = false;
+        }
+
+        function refreshBoard() {
+            const boardDiv = document.getElementById('tetris-board');
+            boardDiv.innerHTML = '';
+            board.forEach(row => {
+                row.forEach(cell => {
+                    const cellDiv = document.createElement('div');
+                    cellDiv.className = 'cell';
+                    if (cell) cellDiv.classList.add(`block-${cell}`);
+                    boardDiv.appendChild(cellDiv);
+                });
+            });
+
+            currentBlock.shape.forEach((row, dy) => {
+                row.forEach((cell, dx) => {
+                    if (cell) {
+                        const cellDiv = document.createElement('div');
+                        cellDiv.className = 'cell block-' + currentBlock.type;
+                        boardDiv.children[(currentBlock.y + dy) * boardWidth + (currentBlock.x + dx)].replaceWith(cellDiv);
+                    }
+                });
+            });
+        }
+
+        function moveBlock(dx, dy) {
+            if (isValidMove(currentBlock.x + dx, currentBlock.y + dy, currentBlock.shape)) {
+                currentBlock.x += dx;
+                currentBlock.y += dy;
+                refreshBoard();
+                return true;
+            }
+            return false;
+        }
+
+        function rotateBlock() {
+            const rotatedShape = currentBlock.shape[0].map((_, idx) => 
+                currentBlock.shape.map(row => row[idx]).reverse()
+            );
+            if (isValidMove(currentBlock.x, currentBlock.y, rotatedShape)) {
+                currentBlock.shape = rotatedShape;
+                refreshBoard();
+            }
+        }
+
+        function swapBlock() {
+            if (remainingSwaps > 0) { // 남은 교체 횟수 확인
+                createRandomBlock(); // 새 블록 생성
+                remainingSwaps--; // 교체 횟수 감소
+                swapCountElement.textContent = remainingSwaps; // UI 업데이트
+            } else {
+                alert("No more swaps left!");
+            }
+        }
+
+        function isValidMove(x, y, shape) {
+            return shape.every((row, dy) => 
+                row.every((cell, dx) => 
+                    !cell || (board[y + dy] && board[y + dy][x + dx] === '')
+                )
+            );
+        }
+
+        function placeCurrentBlock() {
+            currentBlock.shape.forEach((row, dy) => {
+                row.forEach((cell, dx) => {
+                    if (cell) board[currentBlock.y + dy][currentBlock.x + dx] = currentBlock.type;
+                });
+            });
+        }
+
+        function checkFullRows() {
+            board = board.filter(row => row.some(cell => cell === ''));
+            const rowsCleared = boardHeight - board.length;
+            if (rowsCleared > 0) {
+                board.unshift(...Array.from({ length: rowsCleared }, () => Array(boardWidth).fill('')));
+                score += rowsCleared * 10;
+                scoreElement.textContent = score;
+            }
+        }
+
+        function gameLoop() {
+            if (!moveBlock(0, 1)) {
+                placeCurrentBlock();
+                checkFullRows();
+                createRandomBlock();
+            }
+            refreshBoard();
+        }
+
+        // 키보드 이벤트 리스너 추가
+        document.addEventListener('keydown', (event) => {
+            if (!isGameRunning) return;
+            switch (event.key) {
+                case 'ArrowLeft':
+                    moveBlock(-1, 0); // 좌로 이동
+                    break;
+                case 'ArrowRight':
+                    moveBlock(1, 0); // 우로 이동
+                    break;
+                case 'ArrowDown':
+                    moveBlock(0, 1); // 아래로 이동
+                    break;
+                case 'ArrowUp':
+                    rotateBlock(); // 회전
+                    break;
+                case ' ': // 스페이스바로 블록 교체
+                    swapBlock();
+                    break;
+            }
+        });
+
+        document.getElementById('start-btn').addEventListener('click', startGame);
+        document.getElementById('pause-btn').addEventListener('click', pauseGame);
+    </script>
+</body>
+</html>
