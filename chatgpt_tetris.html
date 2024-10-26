@@ -26,10 +26,19 @@
         .block-l { background-color: blue; }
         .block-j { background-color: purple; }
         .block-t { background-color: yellow; }
+        /* 라운드 표시 텍스트 스타일 */
+        .round-text {
+            color: black;
+            font-weight: bold;
+            font-size: 50px;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="container text-center mt-4">
+    <div class="container text-center mt-4 position-relative">
         <h1>Tetris Game</h1>
         <div class="tetris-board" id="tetris-board"></div>
         <div class="mt-3">
@@ -38,6 +47,7 @@
         </div>
         <h3 class="mt-3">Score: <span id="score">0</span></h3>
         <h3>Remaining Swaps: <span id="swap-count">3</span></h3>
+        <div id="round-display" class="round-text">Round 1</div>
     </div>
 
     <script>
@@ -47,8 +57,11 @@
         let currentBlock, gameInterval, isGameRunning = false;
         const scoreElement = document.getElementById('score');
         const swapCountElement = document.getElementById('swap-count');
+        const roundDisplay = document.getElementById('round-display');
         let score = 0;
         let remainingSwaps = 3;
+        let round = 1;
+        let fallSpeed = 1000;  // 초기 속도: 1초마다 한 칸
 
         const blocks = {
             o: [[1, 1], [1, 1]],
@@ -73,12 +86,17 @@
         }
 
         function startGame() {
-            if (isGameRunning) return; // 게임이 이미 실행 중인 경우 새로운 블록 생성 방지
+            if (isGameRunning) return;
             isGameRunning = true;
-            remainingSwaps = 3;  // 교체 횟수 초기화
+            remainingSwaps = 3;
+            score = 0;
+            round = 1;
+            fallSpeed = 1000;  // 초기 속도
+            scoreElement.textContent = score;
             swapCountElement.textContent = remainingSwaps;
-            gameInterval = setInterval(gameLoop, 1000); // 1초마다 아래로 한 칸씩 이동
-            if (!currentBlock) createRandomBlock(); // 첫 게임 시작 시에만 블록 생성
+            updateRound();
+            gameInterval = setInterval(gameLoop, fallSpeed);
+            if (!currentBlock) createRandomBlock();
         }
 
         function pauseGame() {
@@ -130,10 +148,10 @@
         }
 
         function swapBlock() {
-            if (remainingSwaps > 0) { // 남은 교체 횟수 확인
-                createRandomBlock(); // 새 블록 생성
-                remainingSwaps--; // 교체 횟수 감소
-                swapCountElement.textContent = remainingSwaps; // UI 업데이트
+            if (remainingSwaps > 0) {
+                createRandomBlock();
+                remainingSwaps--;
+                swapCountElement.textContent = remainingSwaps;
             } else {
                 alert("No more swaps left!");
             }
@@ -162,7 +180,29 @@
                 board.unshift(...Array.from({ length: rowsCleared }, () => Array(boardWidth).fill('')));
                 score += rowsCleared * 10;
                 scoreElement.textContent = score;
+                updateRound();  // 점수 변경 시 라운드 업데이트
             }
+        }
+
+        function updateRound() {
+            if (score >= 500 && round < 3) {
+                round = 3;
+                fallSpeed = 500; // Round 3 속도
+                roundDisplay.textContent = "Round 3";
+                restartGameInterval();
+            } else if (score >= 200 && round < 2) {
+                round = 2;
+                fallSpeed = 800; // Round 2 속도
+                roundDisplay.textContent = "Round 2";
+                restartGameInterval();
+            } else if (round === 1) {
+                roundDisplay.textContent = "Round 1";
+            }
+        }
+
+        function restartGameInterval() {
+            clearInterval(gameInterval);
+            gameInterval = setInterval(gameLoop, fallSpeed);  // 속도에 따라 게임 루프 재설정
         }
 
         function gameLoop() {
