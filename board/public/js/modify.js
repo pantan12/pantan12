@@ -31,7 +31,7 @@ const modifyHandler = (e) => {
 
     const boardsStr = JSON.stringify(boardsObj);
     localStorage.setItem("boards", boardsStr);
-    location.href = "C:/Users\SAMSUNG/Documents/Visual Studio 2022/pantan12/board/board/view.html" + idx;
+    location.href = "./view.html" + idx;
   } catch (e) {
     alert(e.message);
     console.error(e);

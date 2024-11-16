@@ -58,7 +58,7 @@ const submitHandler = (e) => {
     // boards 저장
     const boardsStr = JSON.stringify(boardsObj);
     localStorage.setItem("boards", boardsStr);
-    location.href = "C:/Users/SAMSUNG/Documents/Visual Studio 2022/pantan12/board/board/view.html?index=" + index;
+    location.href = "./view.html?index=" + index;
   } catch (e) {
     // 예외 발생시 메시지 출력
     alert(e.message);

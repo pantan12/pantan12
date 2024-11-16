@@ -1,24 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>
-        <a href="C:/Users/SAMSUNG/Documents/Visual Studio 2022/pantan12/board/index.html">로고</a>
+      <a href="../indew.html">로고</a>
     </h1>
     <h2>게시판 쓰기</h2>
 
     <form id="writeFrm">
-        <div>제목 : <input type="text" name="subject"/></div>
-        <div>작성자 : <input type="text" name="writer"/></div>
-        <div>내용 : <textarea name="content"></textarea></div>
-        <input type="submit" value="글작성"/>
+      <div>제목 : <input type="text" name="subject" /></div>
+      <div>작성자 : <input type="text" name="writer" /></div>
+      <div>내용 : <textarea name="content"></textarea></div>
+      <input type="submit" value="글작성" />
     </form>
-    <a href="C:/Users/SAMSUNG/Documents/Visual Studio 2022/pantan12/board/board/list.html">뒤로가기</a>
-    <script src="C:/Users/SAMSUNG/Documents/Visual Studio 2022/pantan12/board/public/js/write.js"></script>
-</body>
+    <a href="./list.html">뒤로가기</a>
+    <script src="../public/js/write.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDbVdAvWKaHWEiI9jIAobC-Tfpkg_TT9D8",
+          authDomain: "pantan12.firebaseapp.com",
+          databaseURL: "https://pantan12-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "pantan12",
+          storageBucket: "pantan12.firebasestorage.app",
+          messagingSenderId: "466118741218",
+          appId: "1:466118741218:web:01ef94f2d16d8fa0fea2bb"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+      </script>
+      <script src="../firebase.js"></script>
+      <script src="../public/js/write.js"></script>
+  </body>
+  
 </html>

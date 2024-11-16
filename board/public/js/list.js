@@ -12,7 +12,7 @@ const template = (index, objValue) => {
   return `
   <tr>
   <td>${index + 1}</td>
-  <td><a href="C:/Users/SAMSUNG/Documents/Visual Studio 2022/pantan12\board\board/view.html?index=${objValue.index}">${objValue.subject}</a></td>
+  <td><a href="./view.html?index=${objValue.index}">${objValue.subject}</a></td>
   <td>${objValue.writer}</td>
   <td>${objValue.date}</td>
   <td>${objValue.views}</td>

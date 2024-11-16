@@ -1,26 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>
-        <a href="/index.html">로고</a>
+      <a href="../indew.html">로고</a>
     </h1>
     <h2>작성한 게시글</h2>
 
     <form id="viewFrm">
-        <div id="subject">제목 :</div>
-        <div id="writer">작성자 :</div>
-        <div id="date">작성일 :</div>
-        <div id="content">내용 :</div>
+      <div id="subject">제목 :</div>
+      <div id="writer">작성자 :</div>
+      <div id="date">작성일 :</div>
+      <div id="content">내용 :</div>
     </form>
     <button id="modify">수정</button>
-    <a href="C:/Users/SAMSUNG/Documents/Visual Studio 2022/pantan12/board/board/list.html">뒤로가기</a>
+    <a href="./list.html">뒤로가기</a>
     <button id="delete">삭제</button>
-    <script src="C:/Users/SAMSUNG/Documents/Visual Studio 2022/pantan12/board/public/js/view.js"></script>
-</body>
+    <script src="../public/js/view.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyDbVdAvWKaHWEiI9jIAobC-Tfpkg_TT9D8",
+          authDomain: "pantan12.firebaseapp.com",
+          databaseURL: "https://pantan12-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "pantan12",
+          storageBucket: "pantan12.firebasestorage.app",
+          messagingSenderId: "466118741218",
+          appId: "1:466118741218:web:01ef94f2d16d8fa0fea2bb"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+      </script>
+      <script src="../firebase.js"></script>
+      <script src="../public/js/view.js"></script>
+  </body>
+  
 </html>
